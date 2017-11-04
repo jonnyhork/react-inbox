@@ -1,6 +1,12 @@
 import React from 'react'
 
-const Toolbar = () => (
+const Toolbar = ( {
+  messages,
+  markAsRead,
+  markAsUnread,
+}) => {
+
+  return (
 
   <div className="row toolbar">
     <div className="col-md-12">
@@ -17,7 +23,7 @@ const Toolbar = () => (
         <i className="fa fa-minus-square-o"></i>
       </button>
 
-      <button className="btn btn-default">Mark As Read</button>
+      <button className="btn btn-default" onClick={markAsRead}>Mark As Read</button>
 
       <button className="btn btn-default">Mark As Unread</button>
 
@@ -41,7 +47,7 @@ const Toolbar = () => (
     </div>
   </div>
 
-)
+)}
 
 
 
