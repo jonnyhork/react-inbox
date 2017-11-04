@@ -17,10 +17,10 @@ const Message = ( {message, toggleSelect, toggleStarred} ) => {
 
   return (
 
-  <div className={`row message ${readClass} ${selectedClass}`} onClick={() => toggleSelect(message)} >
+  <div className={`row message ${readClass} ${selectedClass}`}  >
     <div className="col-xs-1">
       <div className="row">
-        <div className="col-xs-2">
+        <div className="col-xs-2" onClick={() => toggleSelect(message)}>
           <input type="checkbox" checked={!!message.selected} readOnly= {true}/>
         </div>
         <div className="col-xs-2" onClick={starMessage}>
@@ -37,8 +37,6 @@ const Message = ( {message, toggleSelect, toggleStarred} ) => {
   </div>
 
 )}
-
-
 
 
 export default Message

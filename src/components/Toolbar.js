@@ -8,6 +8,21 @@ const Toolbar = ( {
   removeLabel
 }) => {
 
+  const numberSelected = messages.filter( (message) => message.selected == true).length
+  console.log("numberSelected", numberSelected)
+  let selectAllProp
+
+  switch (numberSelected) {
+    case 0:
+        selectAllProp = 'fa-square-o'
+      break;
+    case messages.length:
+        selectAllProp = 'fa-check-square-o'
+      break;
+    default:
+        selectAllProp = 'fa-minus-square-o'
+  }
+
   return (
 
   <div className="row toolbar">
@@ -22,7 +37,7 @@ const Toolbar = ( {
       </a>
 
       <button className="btn btn-default">
-        <i className="fa fa-minus-square-o"></i>
+        <i className={`fa ${selectAllProp}`}></i>
       </button>
 
       <button className="btn btn-default" onClick={markAsRead}>Mark As Read</button>
