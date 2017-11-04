@@ -12,7 +12,8 @@ const Message = ( {message, toggleSelect, toggleStarred} ) => {
     toggleStarred(message)
   }
 
-
+  const labels = message.labels.map( (label, i) => (<span className="label label-warning" key={i}>{label}</span>) )
+  // console.log("The labels are:", labels)
 
   return (
 
@@ -28,6 +29,7 @@ const Message = ( {message, toggleSelect, toggleStarred} ) => {
       </div>
     </div>
     <div className="col-xs-11">
+      {labels}
       <a href="#">
         {message.subject}
       </a>

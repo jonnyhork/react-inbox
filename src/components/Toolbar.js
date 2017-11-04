@@ -4,6 +4,8 @@ const Toolbar = ( {
   messages,
   markAsRead,
   markAsUnread,
+  applyLabel,
+  removeLabel
 }) => {
 
   return (
@@ -27,14 +29,14 @@ const Toolbar = ( {
 
       <button className="btn btn-default" onClick={markAsUnread}>Mark As Unread</button>
 
-      <select className="form-control label-select">
+      <select className="form-control label-select" onChange={(e) => {applyLabel(e.target.value); e.target.selectedIndex = 0}}>
         <option>Apply label</option>
         <option value="dev">dev</option>
         <option value="personal">personal</option>
         <option value="gschool">gschool</option>
       </select>
 
-      <select className="form-control label-select">
+      <select className="form-control label-select" onChange={(e)=>{removeLabel(e.target.value); e.target.selectedIndex = 0}}>
         <option>Remove label</option>
         <option value="dev">dev</option>
         <option value="personal">personal</option>
