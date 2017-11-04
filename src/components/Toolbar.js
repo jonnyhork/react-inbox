@@ -25,7 +25,7 @@ const Toolbar = ( {
 
       <button className="btn btn-default" onClick={markAsRead}>Mark As Read</button>
 
-      <button className="btn btn-default">Mark As Unread</button>
+      <button className="btn btn-default" onClick={markAsUnread}>Mark As Unread</button>
 
       <select className="form-control label-select">
         <option>Apply label</option>
