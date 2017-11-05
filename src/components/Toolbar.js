@@ -5,10 +5,11 @@ const Toolbar = ( {
   markAsRead,
   markAsUnread,
   applyLabel,
-  removeLabel
+  removeLabel,
+  selectAll
 }) => {
-
-  const numberSelected = messages.filter( (message) => message.selected == true).length
+  const numUnread = messages.filter((message) => message.read === false).length
+  const numberSelected = messages.filter( (message) => message.selected === true).length //filter returns an array of matching elements
   console.log("numberSelected", numberSelected)
   let selectAllProp
 
@@ -23,12 +24,13 @@ const Toolbar = ( {
         selectAllProp = 'fa-minus-square-o'
   }
 
+
   return (
 
   <div className="row toolbar">
     <div className="col-md-12">
       <p className="pull-right">
-        <span className="badge badge">2</span>
+        <span className="badge badge">{numUnread}</span>
         unread messages
       </p>
 
@@ -36,7 +38,7 @@ const Toolbar = ( {
         <i className="fa fa-plus"></i>
       </a>
 
-      <button className="btn btn-default">
+      <button className="btn btn-default" onClick={selectAll}>
         <i className={`fa ${selectAllProp}`}></i>
       </button>
 

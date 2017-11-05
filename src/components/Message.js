@@ -30,7 +30,7 @@ const Message = ( {message, toggleSelect, toggleStarred} ) => {
     </div>
     <div className="col-xs-11">
       {labels}
-      <a href="#">
+      <a >
         {message.subject}
       </a>
     </div>
