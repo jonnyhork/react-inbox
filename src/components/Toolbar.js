@@ -6,7 +6,8 @@ const Toolbar = ( {
   markAsUnread,
   applyLabel,
   removeLabel,
-  selectAll
+  selectAll,
+  deleteMessage
 }) => {
   const numUnread = messages.filter((message) => message.read === false).length
   const numberSelected = messages.filter( (message) => message.selected === true).length //filter returns an array of matching elements
@@ -60,7 +61,7 @@ const Toolbar = ( {
         <option value="gschool">gschool</option>
       </select>
 
-      <button className="btn btn-default">
+      <button className="btn btn-default" onClick={deleteMessage}>
         <i className="fa fa-trash-o"></i>
       </button>
     </div>
