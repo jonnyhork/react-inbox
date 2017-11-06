@@ -50,9 +50,9 @@ class App extends Component {
   // }
   selectAll(){
     const numSelected = this.state.messages.filter( message => message.selected === true).length
-    console.log("numSelected is", numSelected)
+    // console.log("numSelected is", numSelected)
     const selected = numSelected !== this.state.messages.length
-    console.log("selected is", selected)
+    // console.log("selected is", selected)
 
     this.setState({
       messages: this.state.messages.map( message => message.selected !== selected ? {...message, selected} : message)
