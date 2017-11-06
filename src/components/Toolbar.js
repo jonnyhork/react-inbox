@@ -35,10 +35,6 @@ const Toolbar = ( {
         unread messages
       </p>
 
-      <a className="btn btn-danger">
-        <i className="fa fa-plus"></i>
-      </a>
-
       <button className="btn btn-default" onClick={selectAll}>
         <i className={`fa ${selectAllProp}`}></i>
       </button>
