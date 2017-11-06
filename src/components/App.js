@@ -35,7 +35,6 @@ class App extends Component {
     //     {...message, [property]: !message[property] },
     //     ...this.state.messages.slice(idx + 1)
     //   ]})
-
   }
 
   // selectAll() {
