@@ -7,13 +7,34 @@ import MessageList from '../components/MessageList'
 
 class App extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      messages: props.messages
+  // constructor(props) {
+  //   super(props)
+  //   this.state = {
+  //     messages: props.messages
+  //   }
+  //   console.log('The current state of the props.messages:', this.state)
+  // }
+
+    state = {
+      messages: []
     }
-    console.log('The current state of the props.messages:', this.state)
-  }
+
+
+    async componentDidMount() {
+      const messages = await this.getMessages()
+      console.log('MESSAGES CDM:', messages)
+      this.setState({
+        messages
+      })
+    }
+
+    async getMessages() {
+        const response = await fetch('http://localhost:8082/api/messages/')
+        const json = await response.json()
+
+        return json._embedded.messages
+      }
+
 
   toggleProperty(message, property) {
     // console.log("data type of message is:", typeof message)
