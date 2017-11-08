@@ -7,14 +7,6 @@ import MessageList from '../components/MessageList'
 
 class App extends Component {
 
-  // constructor(props) {
-  //   super(props)
-  //   this.state = {
-  //     messages: props.messages
-  //   }
-  //   console.log('The current state of the props.messages:', this.state)
-  // }
-
     state = {
       messages: []
     }
@@ -34,6 +26,8 @@ class App extends Component {
 
         return json._embedded.messages
       }
+
+      // for the other patch routes need to send an object payload that has { messagesIds: '[1,2]', command: 'read', read: true } kind of thing but in the JSON.stringify() it expects an array of message ids a command and maybe a new state value like read:true
 
 
   toggleProperty(message, property) {
@@ -125,7 +119,7 @@ class App extends Component {
     this.setState({ messages })
   }
 
-  deleteMessage(message) {
+  async deleteMessage(message) {
     // filter all the messages that are not selected then set state with the returned array
     let messages = this.state.messages.filter( message => message.selected !== true)
     this.setState({messages})
