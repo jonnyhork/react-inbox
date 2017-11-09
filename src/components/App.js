@@ -79,8 +79,6 @@ class App extends Component {
     })
   }
 
-
-
    async toggleSelect(message) {
     this.toggleProperty(message, 'selected')
   }
@@ -89,7 +87,7 @@ class App extends Component {
     await this.updateMessages({  // This updates the API
       "messageIds":[message.id],
       "command": "star",
-      "star": message.starred
+      "star": !message.starred
     })
     this.toggleProperty(message, 'starred')  // This upodates the local state
   }
