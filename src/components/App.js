@@ -21,13 +21,28 @@ class App extends Component {
     }
 
     async getMessages() {
-        const response = await fetch('http://localhost:8082/api/messages/')
+        const response = await fetch(`http://localhost:8082/api/messages/`)
         const json = await response.json()
-
         return json._embedded.messages
       }
 
       // for the other patch routes need to send an object payload that has { messagesIds: '[1,2]', command: 'read', read: true } kind of thing but in the JSON.stringify() it expects an array of message ids a command and maybe a new state value like read:true
+
+    async request(method = 'GET', body = null) { // this could take a path agrument?
+      if(body) body=JSON.stringify(body)
+      return await fetch(`http://localhost:8082/api/messages/`, {
+        method,
+        headers:{
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        },
+        body
+      })
+    }
+
+    async updateMessages(payload) {
+      await this.request('PATCH', payload)
+    }
 
 
   toggleProperty(message, property) {
@@ -52,37 +67,40 @@ class App extends Component {
     //   ]})
   }
 
-  // selectAll() {
-  //   console.log("selectAll was clicked")
-  //   const selectedMessages = this.state.messages.filter(message => message.selected)// the number of selected messages
-  //   const selected = selectedMessages.length !== this.state.messages.length
-  //   console.log("selected is", selected) // if the number selected is equal to the total number of messages then that means that all the messages are selected and you want to set the value of selected to false. If they are not equal
-  //   this.setState({
-  //     messages: this.state.messages.map(message => (
-  //       message.selected !== selected ? { ...message, selected } : message
-  //     ))
-  //   })
-  // }
-  selectAll(){
-    const numSelected = this.state.messages.filter( message => message.selected === true).length
-    // console.log("numSelected is", numSelected)
-    const selected = numSelected !== this.state.messages.length
-    // console.log("selected is", selected)
-
+  selectAll() {
+    console.log("selectAll was clicked")
+    const selectedMessages = this.state.messages.filter(message => message.selected)// the number of selected messages
+    const selected = selectedMessages.length !== this.state.messages.length
+    console.log("selected is", selected) // if the number selected is equal to the total number of messages then that means that all the messages are selected and you want to set the value of selected to false. If they are not equal
     this.setState({
-      messages: this.state.messages.map( message => message.selected !== selected ? {...message, selected} : message)
+      messages: this.state.messages.map(message => (
+        message.selected !== selected ? { ...message, selected } : message
+      ))
     })
-
   }
-  toggleSelect(message) {
+
+
+
+   async toggleSelect(message) {
     this.toggleProperty(message, 'selected')
   }
 
-  toggleStarred(message) {
-    this.toggleProperty(message, 'starred')
+  async toggleStarred(message) {
+    await this.updateMessages({  // This updates the API
+      "messageIds":[message.id],
+      "command": "star",
+      "star": message.starred
+    })
+    this.toggleProperty(message, 'starred')  // This upodates the local state
   }
 
-  markAsRead() {
+  async markAsRead() {
+
+    await this.updateMessages({
+      "messageIds": this.state.messages.filter(message => message.selected).map(message => message.id),
+      "command": "read",
+      "read": true
+    })
     console.log('markAsRead clicked')
     this.setState({
       messages: this.state.messages.map( (message) => (
@@ -91,7 +109,13 @@ class App extends Component {
     })
   }
 
-  markAsUnread() {
+  async markAsUnread() {
+
+    await this.updateMessages({
+      "messageIds": this.state.messages.filter(message => message.selected).map(message => message.id),
+      "command": "read",
+      "read": false
+    })
     this.setState({
       messages: this.state.messages.map( (message) => (
         message.selected ? {...message, read:false} : message
@@ -99,7 +123,14 @@ class App extends Component {
     })
   }
 
-  applyLabel(label) {
+  async applyLabel(label) {
+
+    await this.updateMessages({
+      "messageIds": this.state.messages.filter(message => message.selected).map(message => message.id),
+      "command": "addLabel",
+      label
+    })
+
     console.log("apply label")
     const messages = this.state.messages.map( (message) => (
       message.selected && !message.labels.includes(label) ? {...message, labels:[...message.labels, label].sort()} : message
@@ -107,7 +138,14 @@ class App extends Component {
     this.setState({ messages })
   }
 
-  removeLabel(label) {
+  async removeLabel(label) {
+
+    await this.updateMessages({
+      "messageIds": this.state.messages.filter(message => message.selected).map(message => message.id),
+      "command": "removeLabel",
+      label
+    })
+
     console.log("remove the label")
     const messages = this.state.messages.map( (message) => {
       const idx = message.labels.indexOf(label)
@@ -120,6 +158,10 @@ class App extends Component {
   }
 
   async deleteMessage(message) {
+    await this.updateMessages({
+      "messageIds": this.state.messages.filter(message => message.selected).map(message => message.id),
+      "command": "delete"
+    })
     // filter all the messages that are not selected then set state with the returned array
     let messages = this.state.messages.filter( message => message.selected !== true)
     this.setState({messages})
