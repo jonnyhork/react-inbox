@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import '../App.css'
 import Toolbar from '../components/Toolbar'
 import MessageList from '../components/MessageList'
+import ComposeMessage from '../components/ComposeMessage'
 
 
 class App extends Component {
@@ -44,40 +45,59 @@ class App extends Component {
       await this.request('PATCH', payload)
     }
 
+    toggleCompose() {
+      this.setState({compose: !this.state.compose})
+    }
 
-  toggleProperty(message, property) {
-    // console.log("data type of message is:", typeof message)
-    // console.log("message is:", message)
-    const idx = this.state.messages.indexOf(message)
-    // console.log(`idx is ${idx}`)
-    this.setState({
-      messages: [
-        ...this.state.messages.slice(0,idx),
-        {...message, [property]: !message[property] },
-        ...this.state.messages.slice(idx + 1)
-      ]
-    })
-    // console.log(`idx is ${idx}`)
-    // console.log("#####This is the slice up to the message:",...this.state.messages.slice(0,idx))
-    // console.log("sliced",{
-    //   messages: [
-    //     ...this.state.messages.slice(0,idx),
-    //     {...message, [property]: !message[property] },
-    //     ...this.state.messages.slice(idx + 1)
-    //   ]})
-  }
+    async sendMessage(message) {
+      const response =  await this.request('POST',{
+        subject: message.subject,
+        body: message.body
+      })
 
-  selectAll() {
-    console.log("selectAll was clicked")
-    const selectedMessages = this.state.messages.filter(message => message.selected)// the number of selected messages
-    const selected = selectedMessages.length !== this.state.messages.length
-    console.log("selected is", selected) // if the number selected is equal to the total number of messages then that means that all the messages are selected and you want to set the value of selected to false. If they are not equal
-    this.setState({
-      messages: this.state.messages.map(message => (
-        message.selected !== selected ? { ...message, selected } : message
-      ))
-    })
-  }
+      const newMessage = await response.json()
+      const messages = [...this.state.messages, newMessage]
+
+      this.setState({
+        messages,
+        compose: false,
+      })
+    }
+
+
+    toggleProperty(message, property) {
+      // console.log("data type of message is:", typeof message)
+      // console.log("message is:", message)
+      const idx = this.state.messages.indexOf(message)
+      // console.log(`idx is ${idx}`)
+      this.setState({
+        messages: [
+          ...this.state.messages.slice(0,idx),
+          {...message, [property]: !message[property] },
+          ...this.state.messages.slice(idx + 1)
+        ]
+      })
+      // console.log(`idx is ${idx}`)
+      // console.log("#####This is the slice up to the message:",...this.state.messages.slice(0,idx))
+      // console.log("sliced",{
+      //   messages: [
+      //     ...this.state.messages.slice(0,idx),
+      //     {...message, [property]: !message[property] },
+      //     ...this.state.messages.slice(idx + 1)
+      //   ]})
+    }
+
+    selectAll() {
+      console.log("selectAll was clicked")
+      const selectedMessages = this.state.messages.filter(message => message.selected)// the number of selected messages
+      const selected = selectedMessages.length !== this.state.messages.length
+      console.log("selected is", selected) // if the number selected is equal to the total number of messages then that means that all the messages are selected and you want to set the value of selected to false. If they are not equal
+      this.setState({
+        messages: this.state.messages.map(message => (
+          message.selected !== selected ? { ...message, selected } : message
+        ))
+      })
+    }
 
    async toggleSelect(message) {
     this.toggleProperty(message, 'selected')
@@ -177,7 +197,14 @@ class App extends Component {
         markAsUnread={this.markAsUnread.bind(this)}
         selectAll={this.selectAll.bind(this)}
         deleteMessage={this.deleteMessage.bind(this)}
+        toggleCompose={this.toggleCompose.bind(this)}
         />
+
+      {
+        this.state.compose ?
+        <ComposeMessage sendMessage={this.sendMessage.bind(this)}/> : null
+      }
+
         <MessageList
         toggleStarred={this.toggleStarred.bind(this)}
         toggleSelect={this.toggleSelect.bind(this)}

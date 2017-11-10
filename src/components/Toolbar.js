@@ -7,7 +7,8 @@ const Toolbar = ( {
   applyLabel,
   removeLabel,
   selectAll,
-  deleteMessage
+  deleteMessage,
+  toggleCompose
 }) => {
   const numUnread = messages.filter((message) => message.read === false).length
   const numberSelected = messages.filter( (message) => message.selected === true).length //filter returns an array of matching elements
@@ -35,9 +36,9 @@ const Toolbar = ( {
         unread messages
       </p>
 
-      <a className="btn btn-danger">
-        <i className="fa fa-plus"></i>
-      </a>
+      <button className="btn btn-danger" onClick={toggleCompose}>
+          <i className={`fa fa-plus`}></i>
+        </button>
 
       <button className="btn btn-default" onClick={selectAll}>
         <i className={`fa ${selectAllProp}`}></i>
