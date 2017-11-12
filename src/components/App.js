@@ -4,6 +4,7 @@ import Toolbar from '../components/Toolbar'
 import MessageList from '../components/MessageList'
 import ComposeMessage from '../components/ComposeMessage'
 
+const API = process.env.REACT_APP_API_URL
 
 class App extends Component {
 
@@ -21,7 +22,7 @@ class App extends Component {
     }
 
     async getMessages() {
-        const response = await fetch(`http://localhost:8082/api/messages/`)
+        const response = await fetch(`${API}/api/messages/`)
         const json = await response.json()
         return json._embedded.messages
       }
