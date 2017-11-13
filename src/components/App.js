@@ -31,7 +31,7 @@ class App extends Component {
 
     async request(method = 'GET', body = null) { // this could take a path agrument?
       if(body) body=JSON.stringify(body)
-      return await fetch(`http://localhost:8082/api/messages/`, {
+      return await fetch(`${API}/api/messages/`, {
         method,
         headers:{
         'Content-Type': 'application/json',
